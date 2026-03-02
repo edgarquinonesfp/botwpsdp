@@ -86,21 +86,25 @@ app.post("/webhook", async (req, res) => {
 async function crearTicket(descripcion, numero) {
     try {
 
+        const inputData = {
+            request: {
+                subject: "Ticket desde WhatsApp",
+                description: descripcion,
+                requester: {
+                    name: "Administrador" // Debe existir en SDP
+                }
+            }
+        };
+
         const response = await axios.post(
             `${process.env.SDP_URL}/api/v3/requests`,
-            {
-                request: {
-                    subject: "Ticket desde WhatsApp",
-                    description: descripcion,
-                    requester: {
-                        name: "Administrador"  // ⚠ debe existir en SDP
-                    }
-                }
-            },
+            new URLSearchParams({
+                input_data: JSON.stringify(inputData)
+            }),
             {
                 headers: {
                     "authtoken": process.env.SDP_API_KEY,
-                    "Content-Type": "application/json"
+                    "Content-Type": "application/x-www-form-urlencoded"
                 }
             }
         );
