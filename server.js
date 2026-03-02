@@ -23,12 +23,14 @@ const sesiones = {};
 async function sendWhatsApp(to, message) {
     try {
 
-        await axios.post(
-            "https://api.wasenderapi.com/send-message",
+        // convertir 59167378077@s.whatsapp.net → +59167378077
+        const numeroLimpio = to.replace("@s.whatsapp.net", "");
+
+        const response = await axios.post(
+            "https://www.wasenderapi.com/api/send-message",
             {
-                sessionId: INSTANCE_ID,
-                to: to,
-                message: message
+                to: `+${numeroLimpio}`,
+                text: message
             },
             {
                 headers: {
@@ -38,13 +40,17 @@ async function sendWhatsApp(to, message) {
             }
         );
 
+        console.log("Mensaje enviado:", response.data);
+
     } catch (error) {
+
         if (error.response) {
             console.log("ERROR WASENDER STATUS:", error.response.status);
             console.log("ERROR WASENDER DATA:", error.response.data);
         } else {
             console.log("ERROR WASENDER:", error.message);
         }
+
     }
 }
 
