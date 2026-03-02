@@ -88,7 +88,7 @@ app.post("/webhook", async (req, res) => {
             const ticketId = await createTicket(description);
 
             await sendWhatsApp(from,
-                `✅ Ticket creado\nID: ${ticketId}`);
+                ` Ticket creado\nID: ${ticketId}`);
 
         }
 
@@ -99,7 +99,7 @@ app.post("/webhook", async (req, res) => {
             const status = await getTicket(id);
 
             await sendWhatsApp(from,
-                `📋 Ticket ${id}\nEstado: ${status}`);
+                `Ticket ${id}\nEstado: ${status}`);
 
         }
 
