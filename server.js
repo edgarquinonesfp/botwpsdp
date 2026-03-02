@@ -73,12 +73,12 @@ async function getTicket(id) {
 
 // webhook
 app.post("/webhook", async (req, res) => {
-    console.log("WEBHOOK ACTIVADO");
+    console.log("====== WEBHOOK RECIBIDO ======");
     console.log(JSON.stringify(req.body, null, 2));
     res.sendStatus(200);
 });
 
-});
+
 
 app.listen(PORT, () =>
     console.log(`Servidor activo en puerto ${PORT}`));
