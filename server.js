@@ -83,8 +83,6 @@ app.post("/webhook", async (req, res) => {
 });
 
 // crear ticket
-const axios = require("axios");
-
 async function crearTicket(descripcion, numero) {
     try {
 
