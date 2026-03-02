@@ -24,7 +24,7 @@ async function sendWhatsApp(to, message) {
         },
         {
             headers: {
-                Authorization: `Bearer ${11a41f748af213b2e6625f417e42ce89461cf7bc9189772a44494fc75e1b1baf}`,
+                Authorization: `Bearer ${WASENDER_API_KEY}`,
                 "Content-Type": "application/json"
             }
         }
