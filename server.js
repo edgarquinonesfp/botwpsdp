@@ -73,54 +73,10 @@ async function getTicket(id) {
 
 // webhook
 app.post("/webhook", async (req, res) => {
-
-    try {
-
-        const message = req.body.message?.conversation;
-        const from = req.body.message?.from;
-
-        if (!message) return res.sendStatus(200);
-
-        if (message.toLowerCase().startsWith("crear")) {
-
-            const description = message.replace("crear", "").trim();
-
-            const ticketId = await createTicket(description);
-
-            await sendWhatsApp(from,
-                ` Ticket creado\nID: ${ticketId}`);
-
-        }
-
-        else if (message.toLowerCase().startsWith("estado")) {
-
-            const id = message.replace("estado", "").trim();
-
-            const status = await getTicket(id);
-
-            await sendWhatsApp(from,
-                `Ticket ${id}\nEstado: ${status}`);
-
-        }
-
-        else {
-
-            await sendWhatsApp(from,
-                "Bienvenido al ServiceDesk\n\n" +
-                "Escriba:\n" +
-                "crear descripción\n" +
-                "estado numero_ticket");
-
-        }
-
-        res.sendStatus(200);
-
-    } catch (err) {
-
-        console.log(err.message);
-        res.sendStatus(500);
-
-    }
+    console.log("WEBHOOK ACTIVADO");
+    console.log(JSON.stringify(req.body, null, 2));
+    res.sendStatus(200);
+});
 
 });
 
