@@ -91,7 +91,7 @@ async function crearTicket(descripcion, numero) {
                 subject: "Ticket desde WhatsApp",
                 description: descripcion,
                 requester: {
-                    name: "Administrador" // Debe existir en SDP
+                    name: "administrator" // Debe existir en SDP
                 }
             }
         };
