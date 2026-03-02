@@ -73,9 +73,41 @@ async function getTicket(id) {
 
 // webhook
 app.post("/webhook", async (req, res) => {
-    console.log("====== WEBHOOK RECIBIDO ======");
-    console.log(JSON.stringify(req.body, null, 2));
-    res.sendStatus(200);
+    try {
+        console.log("====== WEBHOOK RECIBIDO ======");
+
+        const event = req.body.event;
+
+        if (event !== "messages.received") {
+            return res.sendStatus(200);
+        }
+
+        const mensaje = req.body.data?.messageBody?.toLowerCase();
+        const numero = req.body.data?.remoteJid;
+
+        console.log("Mensaje:", mensaje);
+        console.log("Numero:", numero);
+
+        if (!mensaje) {
+            return res.sendStatus(200);
+        }
+
+        if (mensaje.includes("crear ticket")) {
+            console.log("Crear ticket detectado");
+            // aquí llamas a tu función crearTicket()
+        }
+
+        if (mensaje.includes("estado")) {
+            console.log("Consultar estado detectado");
+            // aquí llamas a tu función consultarEstado()
+        }
+
+        res.sendStatus(200);
+
+    } catch (error) {
+        console.error("ERROR WEBHOOK:", error.message);
+        res.sendStatus(500);
+    }
 });
 
 
