@@ -21,19 +21,31 @@ const sesiones = {};
 // ENVIAR MENSAJE WHATSAPP
 // =============================
 async function sendWhatsApp(to, message) {
-    await axios.post(
-        `https://api.wasenderapi.com/instances/${INSTANCE_ID}/messages/send`,
-        {
-            to: to,
-            message: message
-        },
-        {
-            headers: {
-                Authorization: `Bearer ${WASENDER_API_KEY}`,
-                "Content-Type": "application/json"
+    try {
+
+        await axios.post(
+            "https://api.wasenderapi.com/send-message",
+            {
+                sessionId: INSTANCE_ID,
+                to: to,
+                message: message
+            },
+            {
+                headers: {
+                    Authorization: `Bearer ${WASENDER_API_KEY}`,
+                    "Content-Type": "application/json"
+                }
             }
+        );
+
+    } catch (error) {
+        if (error.response) {
+            console.log("ERROR WASENDER STATUS:", error.response.status);
+            console.log("ERROR WASENDER DATA:", error.response.data);
+        } else {
+            console.log("ERROR WASENDER:", error.message);
         }
-    );
+    }
 }
 
 // =============================
