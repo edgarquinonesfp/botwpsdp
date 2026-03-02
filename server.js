@@ -33,43 +33,8 @@ async function sendWhatsApp(to, message) {
 }
 
 
-// crear ticket
-async function createTicket(description) {
-
-    const response = await axios.post(
-        `${SDP_URL}/requests`,
-        {
-            request: {
-                subject: "Ticket desde WhatsApp",
-                description: description
-            }
-        },
-        {
-            headers: {
-                authtoken: SDP_API_KEY,
-                "Content-Type": "application/json"
-            }
-        }
-    );
-
-    return response.data.request.id;
-}
 
 
-// consultar ticket
-async function getTicket(id) {
-
-    const response = await axios.get(
-        `${SDP_URL}/requests/${id}`,
-        {
-            headers: {
-                authtoken: SDP_API_KEY
-            }
-        }
-    );
-
-    return response.data.request.status.name;
-}
 
 
 // webhook
@@ -94,8 +59,15 @@ app.post("/webhook", async (req, res) => {
 
         if (mensaje.includes("crear ticket")) {
             console.log("Crear ticket detectado");
-            // aquí va tu función crearTicket(mensaje, numero)
-        }
+
+        const resultado = await crearTicket(mensaje, numero);
+
+        if (resultado) {
+        console.log("Ticket creado correctamente");
+    } else {
+        console.log("No se pudo crear el ticket");
+    }
+}
 
         if (mensaje.includes("estado")) {
             console.log("Consultar estado detectado");
@@ -109,6 +81,55 @@ app.post("/webhook", async (req, res) => {
         res.sendStatus(500);
     }
 });
+
+// crear ticket
+const axios = require("axios");
+
+async function crearTicket(descripcion, numero) {
+    try {
+
+        const response = await axios.post(
+            `${process.env.SDP_URL}/api/v3/requests`,
+            {
+                request: {
+                    subject: "Ticket desde WhatsApp",
+                    description: descripcion,
+                    requester: {
+                        name: "Administrador"  // ⚠ debe existir en SDP
+                    }
+                }
+            },
+            {
+                headers: {
+                    "authtoken": process.env.SDP_API_KEY,
+                    "Content-Type": "application/json"
+                }
+            }
+        );
+
+        console.log("Ticket creado:", response.data);
+        return response.data;
+
+    } catch (error) {
+        console.error("ERROR CREANDO TICKET:", error.response?.data || error.message);
+        return null;
+    }
+}
+
+// consultar ticket
+async function getTicket(id) {
+
+    const response = await axios.get(
+        `${SDP_URL}/requests/${id}`,
+        {
+            headers: {
+                authtoken: SDP_API_KEY
+            }
+        }
+    );
+
+    return response.data.request.status.name;
+}
 
 
 
