@@ -113,9 +113,16 @@ async function crearTicket(descripcion, numero) {
         return response.data;
 
     } catch (error) {
-        console.error("ERROR CREANDO TICKET:", error.response?.data || error.message);
-        return null;
+
+    if (error.response) {
+        console.log("STATUS:", error.response.status);
+        console.log("DATA COMPLETA:", JSON.stringify(error.response.data, null, 2));
+    } else {
+        console.log("ERROR:", error.message);
     }
+
+    return null;
+}
 }
 
 // consultar ticket
