@@ -71,7 +71,7 @@ async function validarUsuarioEnSDP(login) {
         };
 
         const response = await axios.get(
-            `${SDP_URL}/api/v3/requesters`,
+            `${SDP_URL}/api/v3/users`,
             {
                 params: {
                     input_data: JSON.stringify(searchCriteria)
@@ -84,7 +84,7 @@ async function validarUsuarioEnSDP(login) {
 
         console.log("Respuesta SDP:", response.data);
 
-        return response.data.requesters?.length > 0;
+        return response.data.users?.length > 0;
 
     } catch (error) {
 
