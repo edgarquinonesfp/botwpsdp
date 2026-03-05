@@ -59,17 +59,22 @@ async function sendWhatsApp(to, message) {
 // =============================
 async function validarUsuarioEnSDP(login) {
     try {
+
         const searchCriteria = {
-            field: "login_name",
-            condition: "is",
-            value: login
+            search_criteria: [
+                {
+                    field: "login_name",
+                    condition: "is",
+                    value: login
+                }
+            ]
         };
 
         const response = await axios.get(
             `${SDP_URL}/api/v3/requesters`,
             {
                 params: {
-                    search_criteria: JSON.stringify(searchCriteria)
+                    input_data: JSON.stringify(searchCriteria)
                 },
                 headers: {
                     authtoken: SDP_API_KEY
@@ -77,10 +82,19 @@ async function validarUsuarioEnSDP(login) {
             }
         );
 
+        console.log("Respuesta SDP:", response.data);
+
         return response.data.requesters?.length > 0;
 
     } catch (error) {
-        console.error("Error validando usuario:", error.response?.data || error.message);
+
+        if (error.response) {
+            console.log("ERROR VALIDANDO USUARIO STATUS:", error.response.status);
+            console.log("ERROR VALIDANDO USUARIO DATA:", error.response.data);
+        } else {
+            console.log("ERROR VALIDANDO USUARIO:", error.message);
+        }
+
         return false;
     }
 }
